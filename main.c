@@ -2,9 +2,12 @@
 #include <math.h>
 #include <stdio.h>
 
-#define WINDOW_X 800
-#define WINDOW_Y 800
+// can't reassign when resize event occurs
+/* #define WINDOW_X 800 */
+/* #define WINDOW_Y 800 */
 
+float WINDOW_X = 800;
+float WINDOW_Y = 800;
 /* float number_of_triangles = 1; */
 
 SDL_Window* window;
@@ -59,6 +62,15 @@ void handle_events(int *run_flag)
 		case SDL_QUIT:
 			*run_flag=0;
 			break;
+		case SDL_WINDOWEVENT:
+			switch(event.window.event) // SDL_WindowEventID
+			{
+			case SDL_WINDOWEVENT_RESIZED:
+				WINDOW_X = event.window.data1;
+				WINDOW_Y = event.window.data2;
+				break;
+			}
+			break;
 		}
 	}
 
@@ -111,7 +123,6 @@ void draw_circle(float radius, float x, float y, SDL_Color colour_left, SDL_Colo
 	/* } */
 
 	// Variable width triangles
-	// TODO next steps are to correctly draw halves by starting at the middles, also accounting for fillage by calculating width automatically
 	/* for (int i=0; i<number_of_lines; i++) */
 	/* { */
 	/* 	float rect_width = 50; */
@@ -189,4 +200,4 @@ int main()
 	return 0;
 }
 
-// TODO add resize event and update WINDOW_X and WINDOW_Y variables
+// TODO unlock fps and add counter at the top left
